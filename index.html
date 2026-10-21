@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교원 자기돌봄 심리검사 신청</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f7f6; --card:#fff; --ink:#1f2a27; --sub:#5d6b67; --line:#dde4e1;
+  --main:#2f7d6d; --main-soft:#e3f1ed; --warn:#c0563a; --warn-soft:#fbeae5; --accent:#e9a23b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif;line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px 60px}
+header{background:var(--main);color:#fff;border-radius:16px;padding:24px 22px;margin-bottom:18px}
+header .tag{font-size:13px;opacity:.85}
+header h1{margin:4px 0 6px;font-size:23px}
+header p{margin:0;font-size:14px;opacity:.95}
+.info{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;background:rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;margin-top:14px;font-size:14px}
+.info b{font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:17px;margin:0 0 12px;display:flex;gap:8px;align-items:center}
+.num{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--main);color:#fff;font-size:13px;align-items:center;justify-content:center}
+label.field{display:block;font-size:14px;color:var(--sub);margin-bottom:6px}
+input[type=text],input[type=password]{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit}
+input:focus{outline:2px solid var(--main);border-color:transparent}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.yn button{padding:16px 10px;border:2px solid var(--line);background:#fff;border-radius:12px;font-size:16px;font-family:inherit;cursor:pointer;font-weight:500}
+.yn button.on.yes{border-color:var(--main);background:var(--main-soft);color:var(--main)}
+.yn button.on.no{border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+.hint{font-size:13px;color:var(--sub);margin-top:8px}
+.counter{font-size:14px;font-weight:700;color:var(--main);margin-left:auto}
+.tests{display:grid;gap:10px}
+.test{border:2px solid var(--line);border-radius:12px;padding:14px 14px 12px;cursor:pointer;position:relative;transition:.15s;background:#fff;text-align:left;font-family:inherit;color:inherit;width:100%}
+.test:hover:not(.disabled){border-color:var(--main)}
+.test.on{border-color:var(--main);background:var(--main-soft)}
+.test.disabled{opacity:.45;cursor:not-allowed}
+.test .top{display:flex;align-items:center;gap:8px}
+.test .ttl{font-weight:700;font-size:16px}
+.test .badge{font-size:11px;background:var(--accent);color:#fff;border-radius:20px;padding:1px 8px}
+.test .chk{margin-left:auto;width:22px;height:22px;border-radius:6px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0}
+.test.on .chk{background:var(--main);border-color:var(--main)}
+.test .desc{font-size:13.5px;color:var(--sub);margin-top:6px}
+.test .fit{font-size:13px;margin-top:6px;color:var(--ink)}
+.note{background:#fff8ec;border:1px solid #f1dcb4;border-radius:10px;padding:12px 14px;font-size:13.5px;margin-top:12px}
+.btn{width:100%;padding:15px;border:none;border-radius:12px;background:var(--main);color:#fff;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer}
+.btn:disabled{background:#a9bbb6;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--main);border:1px solid var(--main)}
+.msg{text-align:center;padding:30px 10px}
+.msg .big{font-size:44px}
+.hidden{display:none!important}
+.demo{background:#fff3cd;border:1px solid #f0d58a;color:#7a5a00;font-size:13px;border-radius:10px;padding:8px 12px;margin-bottom:12px}
+.err{color:var(--warn);font-size:14px;margin-top:8px;min-height:20px}
+/* admin */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--main-soft);border-radius:12px;padding:14px;text-align:center}
+.stat.no{background:var(--warn-soft)}
+.stat .v{font-size:28px;font-weight:700}
+.stat .k{font-size:13px;color:var(--sub)}
+.bar{margin:10px 0}
+.bar .row{display:flex;justify-content:space-between;font-size:14px}
+.bar .track{height:12px;background:#eef2f0;border-radius:6px;overflow:hidden;margin-top:4px}
+.bar .fill{height:100%;background:var(--main);border-radius:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left}
+th{background:#f0f4f2;font-weight:500}
+.pill{font-size:12px;border-radius:20px;padding:2px 8px}
+.pill.y{background:var(--main-soft);color:var(--main)}
+.pill.n{background:var(--warn-soft);color:var(--warn)}
+.del{border:none;background:none;color:var(--warn);cursor:pointer;font-size:13px}
+.row2{display:flex;gap:8px;flex-wrap:wrap}
+.row2 .btn{flex:1;min-width:140px;font-size:15px;padding:12px}
+@media(max-width:480px){.stats{grid-template-columns:1fr 1fr 1fr}.stat .v{font-size:22px}}
+@media print{.noprint{display:none!important}body{background:#fff}.card{border:none;padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="demoBanner" class="demo hidden">⚠️ 미리보기 모드: Firebase 설정 전이라 응답이 이 브라우저에만 저장됩니다.</div>
+
+  <!-- ===== 응답 화면 ===== -->
+  <section id="survey">
+    <header>
+      <div class="tag">2026 학교로 찾아가는 교원 집단 자기돌봄 프로그램</div>
+      <h1>“나를 알면 교실이 보인다” 통합심리검사 신청</h1>
+      <p>참여 여부와 희망 검사를 선택해 주세요.</p>
+      <div class="info">
+        <b>일시</b><span>2026. 11. 11.(수) 방과 후, 약 2시간</span>
+        <b>장소</b><span>대룡중학교 (추후 안내)</span>
+        <b>내용</b><span>심리검사 4종 중 2종 선택 실시</span>
+      </div>
+    </header>
+
+    <div id="form">
+      <div class="card">
+        <h2><span class="num">1</span>성명</h2>
+        <input type="text" id="name" placeholder="예) 홍길동" maxlength="20" autocomplete="name">
+        <div class="hint">같은 이름으로 다시 제출하면 기존 응답이 수정됩니다.</div>
+      </div>
+
+      <div class="card">
+        <h2><span class="num">2</span>통합심리검사에 참여하시겠습니까?</h2>
+        <div class="yn">
+          <button type="button" class="yes" data-v="yes">🙋 참여합니다</button>
+          <button type="button" class="no" data-v="no">🙅 참여하지 않습니다</button>
+        </div>
+        <div class="hint">📅 통합심리검사는 <b>2026. 11. 11.(수) 방과 후, 약 2시간</b> 동안 진행됩니다.</div>
+      </div>
+
+      <div class="card hidden" id="testCard">
+        <h2><span class="num">3</span>희망 검사 2가지 선택 <span class="counter" id="counter">0 / 2</span></h2>
+        <div class="tests" id="tests"></div>
+        <div class="note">
+          💡 <b>선택 참고</b><br>
+          특별히 정한 검사가 없다면 <b>TPR + 성격검사 1종</b>을 권장합니다. TPR은 응답 타당도도 함께 확인할 수 있어 다른 검사 결과를 균형 있게 이해하는 데 도움이 됩니다. 실제로 가장 많이 선택되는 조합은 <b>TPR + TCI</b>입니다.<br>
+          관계·소통 중심이면 <b>MBTI</b>, 행동·감정의 내적 동기를 알고 싶다면 <b>교사 애니어그램</b>도 좋습니다.
+        </div>
+      </div>
+
+      <button class="btn" id="submit" disabled>제출하기</button>
+      <div class="err" id="err"></div>
+    </div>
+
+    <div id="done" class="card msg hidden">
+      <div class="big">✅</div>
+      <h2 style="justify-content:center">제출되었습니다</h2>
+      <p id="doneText" style="color:var(--sub)"></p>
+      <button class="btn ghost" id="again" style="max-width:240px">응답 수정하기</button>
+    </div>
+  </section>
+
+  <!-- ===== 관리자 화면 ===== -->
+  <section id="admin" class="hidden">
+    <div id="login" class="card">
+      <h2>🔒 관리자 로그인</h2>
+      <input type="password" id="pw" placeholder="관리자 비밀번호">
+      <div class="err" id="pwErr"></div>
+      <button class="btn" id="pwBtn">확인</button>
+    </div>
+
+    <div id="dash" class="hidden">
+      <header>
+        <div class="tag">관리자 · 실시간 집계</div>
+        <h1>통합심리검사 신청 현황</h1>
+        <p>2026. 11. 11.(수) 방과 후 실시</p>
+      </header>
+
+      <div class="card">
+        <div class="stats">
+          <div class="stat"><div class="v" id="sTotal">0</div><div class="k">전체 응답</div></div>
+          <div class="stat"><div class="v" id="sYes">0</div><div class="k">참여</div></div>
+          <div class="stat no"><div class="v" id="sNo">0</div><div class="k">불참</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📊 검사별 선택 인원 <span class="hint" style="margin:0 0 0 auto">참여자 기준</span></h2>
+        <div id="bars"></div>
+      </div>
+
+      <div class="card">
+        <h2>🧩 조합별 인원</h2>
+        <div id="combos"></div>
+      </div>
+
+      <div class="card">
+        <h2>📋 응답 명단</h2>
+        <div style="overflow-x:auto"><table id="tbl"></table></div>
+      </div>
+
+      <div class="row2 noprint">
+        <button class="btn" id="csv">CSV 다운로드</button>
+        <button class="btn ghost" id="print">인쇄 / PDF</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+/* ============================================================
+   ① Firebase 설정 — Firebase 콘솔 > 프로젝트 설정 > 웹 앱 config 붙여넣기
+   (apiKey가 비어 있으면 미리보기 모드로 동작: 브라우저 localStorage 저장)
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyDmNzR_cdyhX6lg4UnnMfFq6qpCUYRRbe0",
+  authDomain: "uniform-survey-32781.firebaseapp.com",
+  projectId: "uniform-survey-32781",
+  storageBucket: "uniform-survey-32781.firebasestorage.app",
+  messagingSenderId: "90601800342",
+  appId: "1:90601800342:web:03d57b3137df9b3342b8b7",
+  measurementId: "G-6722WPHJ1N"
+};
+const COL = "selfcare2026_psytest";   // Firestore 컬렉션
+const ADMIN_PW = "daeryong1111";      // ② 관리자 비밀번호 (변경 권장)
+
+/* ============================================================ */
+const TESTS = [
+  {id:"TCI", name:"TCI 기질 및 성격검사", badge:"추천",
+   desc:"타고난 기질과 후천적으로 형성된 성격 특성을 알아보는 검사",
+   fit:"개인으로서의 나, 반복되는 감정·관계 패턴을 살펴보고 싶을 때"},
+  {id:"TPR", name:"TPR 교원 심리회복검사", badge:"권장",
+   desc:"교사로서의 스트레스, 심리적 소진, 회복탄력성을 살펴보는 검사",
+   fit:"교직 정서 부담을 점검하고 회복의 방향을 찾고 싶을 때"},
+  {id:"MBTI", name:"MBTI 성격유형검사",
+   desc:"성격유형과 선호하는 사고·소통 방식을 알아보는 검사",
+   fit:"동료·학생과의 의사소통 차이를 이해하고 싶을 때"},
+  {id:"ENN", name:"교사 애니어그램",
+   desc:"성격유형과 행동·감정의 내적 동기를 교사 역할과 연결해 보는 검사",
+   fit:"반복되는 감정·행동의 이유를 학생·동료 관계에 적용해 보고 싶을 때"}
+];
+const NAME = Object.fromEntries(TESTS.map(t=>[t.id,t.name.split(" ")[0]==="교사"?"교사 애니어그램":t.name.split(" ")[0]]));
+
+/* ---------- 저장소 (Firestore / 미리보기) ---------- */
+const DEMO = !firebaseConfig.apiKey;
+let store;
+if (DEMO) {
+  document.getElementById("demoBanner").classList.remove("hidden");
+  const K = "demo_"+COL, listeners = [];
+  const load = () => { try { return JSON.parse(localStorage.getItem(K)||"{}"); } catch { return {}; } };
+  const save = d => { try { localStorage.setItem(K, JSON.stringify(d)); } catch {} listeners.forEach(f=>f(d)); };
+  store = {
+    get: async id => load()[id] || null,
+    set: async (id, v) => { const d = load(); d[id] = v; save(d); },
+    del: async id => { const d = load(); delete d[id]; save(d); },
+    watch: f => { listeners.push(f); f(load()); }
+  };
+} else {
+  const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+  const fs = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+  const db = fs.getFirestore(initializeApp(firebaseConfig));
+  store = {
+    get: async id => { const s = await fs.getDoc(fs.doc(db, COL, id)); return s.exists() ? s.data() : null; },
+    set: (id, v) => fs.setDoc(fs.doc(db, COL, id), v),
+    del: id => fs.deleteDoc(fs.doc(db, COL, id)),
+    watch: f => fs.onSnapshot(fs.collection(db, COL), snap => {
+      const d = {}; snap.forEach(x => d[x.id] = x.data()); f(d);
+    })
+  };
+}
+
+const $ = id => document.getElementById(id);
+const keyOf = n => n.replace(/\s+/g, "");
+
+/* ---------- 응답 화면 ---------- */
+let attend = null, picks = [];
+
+$("tests").innerHTML = TESTS.map(t => `
+  <button type="button" class="test" data-id="${t.id}">
+    <div class="top"><span class="ttl">${t.name}</span>${t.badge?`<span class="badge">${t.badge}</span>`:""}<span class="chk">✓</span></div>
+    <div class="desc">${t.desc}</div>
+    <div class="fit">👉 ${t.fit}</div>
+  </button>`).join("");
+
+function render() {
+  document.querySelectorAll(".yn button").forEach(b => b.classList.toggle("on", b.dataset.v === attend));
+  $("testCard").classList.toggle("hidden", attend !== "yes");
+  document.querySelectorAll(".test").forEach(el => {
+    const on = picks.includes(el.dataset.id);
+    el.classList.toggle("on", on);
+    el.classList.toggle("disabled", !on && picks.length >= 2);
+  });
+  $("counter").textContent = `${picks.length} / 2`;
+  const nameOk = $("name").value.trim().length >= 2;
+  $("submit").disabled = !(nameOk && (attend === "no" || (attend === "yes" && picks.length === 2)));
+}
+
+document.querySelectorAll(".yn button").forEach(b => b.onclick = () => { attend = b.dataset.v; render(); });
+document.querySelectorAll(".test").forEach(el => el.onclick = () => {
+  const id = el.dataset.id;
+  if (picks.includes(id)) picks = picks.filter(x => x !== id);
+  else if (picks.length < 2) picks.push(id);
+  render();
+});
+$("name").oninput = render;
+
+$("submit").onclick = async () => {
+  const name = $("name").value.trim();
+  $("err").textContent = "";
+  $("submit").disabled = true; $("submit").textContent = "저장 중…";
+  try {
+    const id = keyOf(name);
+    const prev = await store.get(id);
+    if (prev && !confirm(`'${name}' 이름으로 이미 제출된 응답이 있습니다.\n새 응답으로 수정할까요?`)) {
+      $("submit").textContent = "제출하기"; render(); return;
+    }
+    const order = TESTS.map(t => t.id);
+    await store.set(id, {
+      name, attend,
+      tests: attend === "yes" ? [...picks].sort((a,b)=>order.indexOf(a)-order.indexOf(b)) : [],
+      updatedAt: new Date().toISOString()
+    });
+    $("form").classList.add("hidden");
+    $("done").classList.remove("hidden");
+    $("doneText").innerHTML = attend === "yes"
+      ? `<b>${name}</b> 선생님, <b>${picks.map(p=>NAME[p]).join(" + ")}</b> 검사로 신청되었습니다.<br>11월 11일(수) 방과 후에 뵙겠습니다.`
+      : `<b>${name}</b> 선생님의 <b>불참</b> 의사가 접수되었습니다.`;
+  } catch (e) {
+    $("err").textContent = "저장에 실패했습니다. 잠시 후 다시 시도해 주세요. (" + e.message + ")";
+  }
+  $("submit").textContent = "제출하기"; render();
+};
+$("again").onclick = () => { $("done").classList.add("hidden"); $("form").classList.remove("hidden"); };
+
+/* ---------- 관리자 화면 (?m=admin) ---------- */
+let rows = [];
+if (new URLSearchParams(location.search).get("m") === "admin") {
+  $("survey").classList.add("hidden");
+  $("admin").classList.remove("hidden");
+  const enter = () => {
+    if ($("pw").value !== ADMIN_PW) { $("pwErr").textContent = "비밀번호가 다릅니다."; return; }
+    $("login").classList.add("hidden"); $("dash").classList.remove("hidden");
+    store.watch(drawDash);
+  };
+  $("pwBtn").onclick = enter;
+  $("pw").onkeydown = e => { if (e.key === "Enter") enter(); };
+}
+
+function drawDash(data) {
+  rows = Object.entries(data).map(([id, v]) => ({ id, ...v }))
+    .sort((a, b) => (a.attend === b.attend ? a.name.localeCompare(b.name, "ko") : a.attend === "yes" ? -1 : 1));
+  const yes = rows.filter(r => r.attend === "yes"), no = rows.filter(r => r.attend === "no");
+  $("sTotal").textContent = rows.length; $("sYes").textContent = yes.length; $("sNo").textContent = no.length;
+
+  const max = Math.max(1, yes.length);
+  $("bars").innerHTML = TESTS.map(t => {
+    const c = yes.filter(r => r.tests?.includes(t.id)).length;
+    return `<div class="bar"><div class="row"><span>${t.name}</span><b>${c}명</b></div>
+      <div class="track"><div class="fill" style="width:${c / max * 100}%"></div></div></div>`;
+  }).join("");
+
+  const combo = {};
+  yes.forEach(r => { const k = (r.tests || []).map(x => NAME[x]).join(" + "); combo[k] = (combo[k] || 0) + 1; });
+  const cs = Object.entries(combo).sort((a, b) => b[1] - a[1]);
+  $("combos").innerHTML = cs.length
+    ? `<table><tr><th>조합</th><th style="width:70px">인원</th></tr>${cs.map(([k, v]) => `<tr><td>${k}</td><td><b>${v}명</b></td></tr>`).join("")}</table>`
+    : `<div class="hint">아직 참여 응답이 없습니다.</div>`;
+
+  $("tbl").innerHTML = `<tr><th>#</th><th>성명</th><th>참여</th><th>선택 검사</th><th class="noprint"></th></tr>` +
+    (rows.length ? rows.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.name)}</td>
+      <td><span class="pill ${r.attend === "yes" ? "y" : "n"}">${r.attend === "yes" ? "참여" : "불참"}</span></td>
+      <td>${(r.tests || []).map(x => NAME[x]).join(", ") || "-"}</td>
+      <td class="noprint"><button class="del" data-id="${r.id}">삭제</button></td></tr>`).join("")
+      : `<tr><td colspan="5" class="hint">응답 없음</td></tr>`);
+  document.querySelectorAll(".del").forEach(b => b.onclick = async () => {
+    if (confirm("이 응답을 삭제할까요?")) await store.del(b.dataset.id);
+  });
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+$("csv").onclick = () => {
+  const head = ["번호", "성명", "참여여부", ...TESTS.map(t => NAME[t.id]), "제출시각"];
+  const body = rows.map((r, i) => [i + 1, r.name, r.attend === "yes" ? "참여" : "불참",
+    ...TESTS.map(t => r.tests?.includes(t.id) ? "O" : ""), (r.updatedAt || "").replace("T", " ").slice(0, 16)]);
+  const csv = "\uFEFF" + [head, ...body].map(a => a.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = "교원자기돌봄_심리검사_신청현황.csv"; a.click();
+};
+$("print").onclick = () => window.print();
+
+render();
+</script>
+</body>
+</html>
